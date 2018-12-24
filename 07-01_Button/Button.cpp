@@ -2,7 +2,7 @@
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 HINSTANCE g_hInst;
-LPCSTR lpszClass = (LPCSTR)TEXT("BkMode");
+LPCSTR lpszClass = (LPCSTR)TEXT("Button");
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevIhstance, LPSTR lpszCmdParam, int nCmdShow)
 {
@@ -38,32 +38,26 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevIhstance, LPSTR lpszCmd
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
-    HDC hdc;
-    PAINTSTRUCT ps;
-    HFONT hFont, OldFont;
-    TCHAR *str = (TCHAR *)TEXT("ÆùÆ® Test 1234");
-    HBRUSH MyBrush, OldBrush;
-
     switch (iMessage)
     {
-    case WM_PAINT:
-        hdc = BeginPaint(hWnd, &ps);
-        MyBrush = CreateHatchBrush(HS_CROSS, RGB(0, 0, 255));
-        OldBrush = (HBRUSH)SelectObject(hdc, MyBrush);
-        Rectangle(hdc, 50, 50, 400, 200);
-        SelectObject(hdc, OldBrush);
-        hFont = CreateFont(30, 0, 0, 0, 0, 0, 0, 0, HANGEUL_CHARSET, 0, 0, 0, VARIABLE_PITCH | FF_ROMAN, TEXT("±Ã¼­"));
-        OldFont = (HFONT)SelectObject(hdc, hFont);
-        SetTextColor(hdc, RGB(255, 0, 0));
-        SetBkColor(hdc, RGB(255, 255, 0));
-        TextOut(hdc, 100, 100, str, lstrlen(str));
-        SetBkMode(hdc, TRANSPARENT);
-        TextOut(hdc, 100, 150, str, lstrlen(str));
-
-        SelectObject(hdc, OldFont);
-        DeleteObject(MyBrush);
-        DeleteObject(hFont);
-        EndPaint(hWnd, &ps);
+    case WM_CREATE:
+        CreateWindow(TEXT("button"), TEXT("Click Me"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 20, 20, 100, 25, hWnd, (HMENU)0, g_hInst, NULL);
+        CreateWindow(TEXT("button"), TEXT("Me Too"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 20, 50, 100, 25, hWnd, (HMENU)1, g_hInst, NULL);
+        CreateWindow(TEXT("button"), TEXT("Close Me"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 20, 80, 100, 25, hWnd, (HMENU)2, g_hInst, NULL);
+        return 0;
+    case WM_COMMAND:
+        switch (LOWORD(wParam))
+        {
+        case 0:
+            MessageBox(hWnd, TEXT("First Button Clicked"), TEXT("Button"), MB_OK);
+            break;
+        case 1:
+            MessageBox(hWnd, TEXT("Second Button Clicked"), TEXT("Button"), MB_OK);
+            break;
+        case 2:
+            DestroyWindow(hWnd);
+            break;
+        }
         return 0;
     case WM_DESTROY:
         PostQuitMessage(0);
