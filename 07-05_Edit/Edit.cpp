@@ -1,10 +1,13 @@
 #include <Windows.h>
 
+#define ID_EDIT 100
+
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 HINSTANCE g_hInst;
-LPCSTR lpszClass = (LPCSTR)TEXT("SimplePaint");
+HWND hEdit;
+LPCSTR lpszClass = (LPCSTR)TEXT("Edit");
 
-int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdParam, int nCmdShow)
+int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInsstance, LPSTR lpszCmdParam, int nCmdShow)
 {
     HWND hWnd;
     MSG Message;
@@ -33,19 +36,31 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
         TranslateMessage(&Message);
         DispatchMessage(&Message);
     }
-    return (int)Message.wParam; 
+    return (int)Message.wParam;
 }
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
-    HDC hdc;
-    PAINTSTRUCT ps;
+    TCHAR str[128];
 
     switch (iMessage)
     {
     case WM_CREATE:
+        hEdit = CreateWindow(TEXT("edit"), NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | ES_AUTOHSCROLL,
+            10, 10, 200, 25,
+            hWnd, (HMENU)ID_EDIT, g_hInst, NULL);
         return 0;
-    case WM_PAINT:
+    case WM_COMMAND:
+        switch (LOWORD(wParam))
+        {
+        case ID_EDIT:
+            switch (HIWORD(wParam))
+            {
+            case EN_CHANGE:
+                GetWindowText(hEdit, str, 128);
+                SetWindowText(hWnd, str);
+            }
+        }
         return 0;
     case WM_DESTROY:
         PostQuitMessage(0);

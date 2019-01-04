@@ -1,10 +1,13 @@
 #include <Windows.h>
 
+#define ID_EDIT 100
+
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 HINSTANCE g_hInst;
-LPCSTR lpszClass = (LPCSTR)TEXT("Font");
+HWND hEdit;
+LPCSTR lpszClass = (LPCSTR)TEXT("EditWnd");
 
-int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevIhstance, LPSTR lpszCmdParam, int nCmdShow)
+int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInsstance, LPSTR lpszCmdParam, int nCmdShow)
 {
     HWND hWnd;
     MSG Message;
@@ -36,33 +39,42 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevIhstance, LPSTR lpszCmd
     return (int)Message.wParam;
 }
 
+int nTop = 10;
+bool bShow = true;
+
 LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
     HDC hdc;
     PAINTSTRUCT ps;
-    HFONT hFont, OldFont;
-    TCHAR *str = (TCHAR *)TEXT("폰트 Test 1234");
-    HBRUSH MyBrush, OldBrush;
+    TCHAR *Mes = (TCHAR *)TEXT("왼쪽 클릭:에디트 이동, 오른쪽 클릭:보임/숨김");
 
     switch (iMessage)
     {
+    case WM_CREATE:
+        hEdit = CreateWindow(TEXT("edit"), NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | ES_AUTOHSCROLL,
+            10, nTop, 200, 25,
+            hWnd, (HMENU)ID_EDIT, g_hInst, NULL);
+        SetWindowText(hEdit, TEXT("에디트도 윈도우다"));
+        return 0;
+    case WM_LBUTTONDOWN:
+        nTop += 10;
+        MoveWindow(hEdit, 10, nTop, 200, 25, true);
+        return 0;
+    case WM_RBUTTONDOWN:
+        if (bShow)
+        {
+            bShow = false;
+            ShowWindow(hEdit, SW_HIDE);
+        }
+        else
+        {
+            bShow = true;
+            ShowWindow(hEdit, SW_SHOW);
+        }
+        return 0;
     case WM_PAINT:
         hdc = BeginPaint(hWnd, &ps);
-        MyBrush = CreateHatchBrush(HS_CROSS, RGB(0, 0, 255));
-        OldBrush = (HBRUSH)SelectObject(hdc, MyBrush);
-        Rectangle(hdc, 50, 50, 400, 200);
-        SelectObject(hdc, OldBrush);
-        hFont = CreateFont(30, 0, 0, 0, 0, 0, 0, 0, HANGEUL_CHARSET, 0, 0, 0, VARIABLE_PITCH | FF_ROMAN, TEXT("궁서"));
-        OldFont = (HFONT)SelectObject(hdc, hFont);
-        SetTextColor(hdc, RGB(255, 0, 0));
-        SetBkColor(hdc, RGB(255, 255, 0));
-        TextOut(hdc, 100, 100, str, lstrlen(str));
-        SetBkMode(hdc, TRANSPARENT);
-        TextOut(hdc, 100, 150, str, lstrlen(str));
-
-        SelectObject(hdc, OldFont);
-        DeleteObject(MyBrush);
-        DeleteObject(hFont);
+        TextOut(hdc, 200, 100, Mes, lstrlen(Mes));
         EndPaint(hWnd, &ps);
         return 0;
     case WM_DESTROY:
