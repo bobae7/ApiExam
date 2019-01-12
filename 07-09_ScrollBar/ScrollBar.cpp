@@ -62,12 +62,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
         hBlue = CreateWindow(TEXT("scrollbar"), NULL, WS_CHILD | WS_VISIBLE | SBS_HORZ,
             10, 70, 400, 20,
             hWnd, (HMENU)ID_SCRBLUE, g_hInst, NULL);
-        //SetScrollRange(hRed, SB_CTL, 0, 255, TRUE);
-        //SetScrollPos(hRed, SB_CTL, 0, TRUE);
-        //SetScrollRange(hGreen, SB_CTL, 0, 255, TRUE);
-        //SetScrollPos(hGreen, SB_CTL, 0, TRUE);
-        //SetScrollRange(hBlue, SB_CTL, 0, 255, TRUE);
-        //SetScrollPos(hBlue, SB_CTL, 0, TRUE);
+        SetScrollRange(hRed, SB_CTL, 0, 255, TRUE);
+        SetScrollPos(hRed, SB_CTL, 0, TRUE);
+        SetScrollRange(hGreen, SB_CTL, 0, 255, TRUE);
+        SetScrollPos(hGreen, SB_CTL, 0, TRUE);
+        SetScrollRange(hBlue, SB_CTL, 0, 255, TRUE);
+        SetScrollPos(hBlue, SB_CTL, 0, TRUE);
         return 0;
     case WM_HSCROLL:
         if ((HWND)lParam == hRed) TempPos = Red;
