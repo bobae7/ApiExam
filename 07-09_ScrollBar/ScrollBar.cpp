@@ -6,7 +6,7 @@
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 HINSTANCE g_hInst;
-LPCSTR lpszClass = (LPCSTR)TEXT("ScrollBar");
+LPCSTR lpszClass = (LPCSTR)TEXT("ScrollBarExam");
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevIhstance, LPSTR lpszCmdParam, int nCmdShow)
 {
