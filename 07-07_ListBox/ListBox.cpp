@@ -4,7 +4,7 @@
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 HINSTANCE g_hInst;
-LPCSTR lpszClass = (LPCSTR)TEXT("ListBox");
+LPCSTR lpszClass = (LPCSTR)TEXT("ListBoxExam");
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevIhstance, LPSTR lpszCmdParam, int nCmdShow)
 {
@@ -39,19 +39,19 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevIhstance, LPSTR lpszCmd
 }
 
 TCHAR *Items[] = { (LPSTR)TEXT("Apple"), (LPSTR)TEXT("Orange"), (LPSTR)TEXT("Melon"), (LPSTR)TEXT("Grape"), (LPSTR)TEXT("Strawberry") };
-char str[128];
 HWND hList;
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
     int i;
+    TCHAR str[128];
 
     switch (iMessage) {
     case WM_CREATE:
-        hList = CreateWindowEx(0, "listbox", TEXT("Fruit"), WS_CHILD | WS_VISIBLE | WS_BORDER | LBS_NOTIFY,
+        hList = CreateWindow(TEXT("listbox"), TEXT("Fruit"), WS_CHILD | WS_VISIBLE | WS_BORDER | LBS_NOTIFY,
             10, 10, 100, 200,
             hWnd, (HMENU)ID_LISTBOX, g_hInst, NULL);
-        for (i = 0; i < 5; i++)
+        for (i = 0; i < 5; ++i)
             SendMessage(hList, LB_ADDSTRING, 0, (LPARAM)Items[i]);
         return 0;
     case WM_COMMAND:

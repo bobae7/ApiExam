@@ -4,7 +4,7 @@
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 HINSTANCE g_hInst;
-LPCSTR lpszClass = (LPCSTR)TEXT("ComboBox");
+LPCSTR lpszClass = (LPCSTR)TEXT("ComboBoxExam");
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevIhstance, LPSTR lpszCmdParam, int nCmdShow)
 {
@@ -39,23 +39,21 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevIhstance, LPSTR lpszCmd
 }
 
 TCHAR *Items[] = { (LPSTR)TEXT("Apple"), (LPSTR)TEXT("Orange"), (LPSTR)TEXT("Melon"), (LPSTR)TEXT("Grape"), (LPSTR)TEXT("Strawberry") };
-char str[128];
 HWND hCombo;
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
     int i;
+    TCHAR str[128];
 
     switch (iMessage)
     {
     case WM_CREATE:
-        hCombo = CreateWindow("combobox", TEXT("Fruit"), WS_CHILD | WS_VISIBLE | CBS_DROPDOWN,
+        hCombo = CreateWindow(TEXT("combobox"), NULL, WS_CHILD | WS_VISIBLE | CBS_DROPDOWN,
             10, 10, 100, 200,
             hWnd, (HMENU)ID_COMBOBOX, g_hInst, NULL);
-        for (i = 0; i < 5; i++)
-        {
+        for (i = 0; i < 5; ++i)
             SendMessage(hCombo, CB_ADDSTRING, 0, (LPARAM)Items[i]);
-        }
         return 0;
     case WM_COMMAND:
         switch (LOWORD(wParam)) {
